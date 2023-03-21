@@ -40,8 +40,10 @@ class _BottomNavigationBar extends StatelessWidget {
 class _Pages extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final navigationModel = Provider.of<_NavigationModel>(context);
     return PageView(
       // physics: const BouncingScrollPhysics(),
+      controller: navigationModel.pageController,
       physics: const NeverScrollableScrollPhysics(),
       children: [
         Container(
@@ -58,11 +60,19 @@ class _Pages extends StatelessWidget {
 //  Mixin ChangeNotifier: https://stackoverflow.com/questions/57243896/with-keyword-in-flutter
 class _NavigationModel with ChangeNotifier {
   int _actualPage = 0;
+  final PageController _pageController = PageController();
 
   int get actualPage => _actualPage;
 
   set actualPage(int value) {
     _actualPage = value;
+    _pageController.animateToPage(
+      value,
+      duration: const Duration(milliseconds: 250),
+      curve: Curves.easeOut,
+    );
     notifyListeners();
   }
+
+  PageController get pageController => _pageController;
 }
