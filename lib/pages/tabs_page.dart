@@ -9,7 +9,7 @@ class TabsPage extends StatelessWidget {
     return ChangeNotifierProvider(
       create: (_) => _NavigationModel(),
       child: Scaffold(
-        body: _Pages(),
+        body: SafeArea(child: _Pages()),
         bottomNavigationBar: _BottomNavigationBar(),
       ),
     );
