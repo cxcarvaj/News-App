@@ -11,6 +11,8 @@ class NewsService with ChangeNotifier {
 
   Map<String, List<Article>> categoryArticles = {};
 
+  bool _isLoading = true;
+
   List<Category> categories = [
     Category(name: 'business', icon: FontAwesomeIcons.building),
     Category(name: 'entertainment', icon: FontAwesomeIcons.tv),
@@ -28,15 +30,23 @@ class NewsService with ChangeNotifier {
     for (var category in categories) {
       categoryArticles[category.name] = [];
     }
+    getArticlesByCategory(_selectedCategory);
   }
+
+  bool get isLoading => _isLoading;
 
   String get selectedCategory => _selectedCategory;
 
   set selectedCategory(String value) {
     _selectedCategory = value;
+
+    _isLoading = true;
     getArticlesByCategory(value);
     notifyListeners();
   }
+
+  List<Article> get getArticlesBySelectedCategory =>
+      categoryArticles[selectedCategory]!;
 
   getTopHeadlines() async {
     final url = Uri.https(_URL_NEWS, '/v2/top-headlines', {
@@ -55,6 +65,8 @@ class NewsService with ChangeNotifier {
 
   getArticlesByCategory(String category) async {
     if (categoryArticles[category]!.isNotEmpty) {
+      _isLoading = false;
+      notifyListeners();
       return categoryArticles[category];
     }
 
@@ -70,6 +82,7 @@ class NewsService with ChangeNotifier {
 
     categoryArticles[category]!.addAll(newsResponse.articles);
 
+    _isLoading = false;
     notifyListeners();
   }
 }

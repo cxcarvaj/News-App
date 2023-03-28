@@ -4,15 +4,28 @@ import 'package:news_app/services/news_service.dart';
 import 'package:news_app/theme/theme.dart';
 import 'package:provider/provider.dart';
 
+import '../widgets/list_news.dart';
+
 class TabTwoPage extends StatelessWidget {
   const TabTwoPage({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
+    final newsService = Provider.of<NewsService>(context);
     return SafeArea(
       child: Scaffold(
         body: Column(
           children: [
             _CategoryList(),
+            (!newsService.isLoading)
+                ? Expanded(
+                    child: ListNews(
+                      articles: newsService.getArticlesBySelectedCategory,
+                    ),
+                  )
+                : const Expanded(
+                    child: Center(
+                    child: CircularProgressIndicator(),
+                  ))
           ],
         ),
       ),
