@@ -41,6 +41,10 @@ class _News extends StatelessWidget {
         ),
         _CardTitle(news: news),
         _CardImage(news: news),
+        _CardBody(news: news),
+        _CardButtons(),
+        const SizedBox(height: 10),
+        const Divider(),
       ],
     );
   }
@@ -105,9 +109,75 @@ class _CardImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 15),
-      child: const Text(
-        'Image here',
+      margin: const EdgeInsets.symmetric(vertical: 10),
+      child: ClipRRect(
+        borderRadius: const BorderRadius.only(
+          topLeft: Radius.circular(50),
+          bottomRight: Radius.circular(50),
+        ),
+        child: Container(
+          child: (news.urlToImage != null)
+              ? FadeInImage(
+                  placeholder: const AssetImage('assets/img/giphy.gif'),
+                  image: NetworkImage(news.urlToImage!),
+                )
+              : const Image(
+                  image: AssetImage('assets/img/no-image.png'),
+                ),
+        ),
+      ),
+    );
+  }
+}
+
+class _CardBody extends StatelessWidget {
+  final Article news;
+
+  const _CardBody({
+    super.key,
+    required this.news,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      child: Text(
+        (news.description != null) ? news.description! : '',
+      ),
+    );
+  }
+}
+
+class _CardButtons extends StatelessWidget {
+  const _CardButtons({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          RawMaterialButton(
+            onPressed: () {},
+            fillColor: myTheme.colorScheme.secondary,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: const Icon(Icons.star_border),
+          ),
+          const SizedBox(width: 10),
+          RawMaterialButton(
+            onPressed: () {},
+            fillColor: Colors.blue,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: const Icon(Icons.more),
+          ),
+        ],
       ),
     );
   }
